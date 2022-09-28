@@ -9,41 +9,31 @@ import {
   Button,
 } from "@mui/material";
 
-import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
 import PasswordIcon from "@mui/icons-material/Password";
 
 import logo from "../../assets/images/insta-logo.png";
 
-import { Link } from "react-router-dom";
-
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import YupPassword from "yup-password";
-YupPassword(Yup);
+
+import { Link } from "react-router-dom";
 
 const initialValues = {
-  Name: "",
-  Email: "",
-  Password: "",
+  email: "",
+  password: "",
 };
 
 const validationSchema = Yup.object({
-  Name: Yup.string().required("Required").min(5).max(20),
-  Email: Yup.string().email().required(),
-  Password: Yup.string()
-    .required()
-    .minLowercase(1, "password must contain at least 1 lower case letter")
-    .minUppercase(1, "password must contain at least 1 upper case letter")
-    .minNumbers(1, "password must contain at least 1 number")
-    .minSymbols(1, "password must contain at least 1 special character"),
+  email: Yup.string().email().required(),
+  password: Yup.string().required(),
 });
 
 const onSubmit = (values) => {
   console.log(values);
 };
 
-const SignUp = () => {
+const Login = () => {
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -69,42 +59,21 @@ const SignUp = () => {
         <Grid container spacing={2} sx={{ ml: 30 }}>
           <Grid item lg={12}>
             <Typography variant="h3" sx={{ color: "primary.main" }}>
-              Signup
+              Login
             </Typography>
           </Grid>
+
           <Grid item lg={12}>
             <TextField
-              id="Name"
-              name="Name"
-              label="Name"
-              type="text"
-              value={formik.values.Name}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.Name && Boolean(formik.errors.Name)}
-              helperText={formik.touched.Name && formik.errors.Name}
-              variant="outlined"
-              sx={{ width: 440 }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <PersonIcon />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid>
-          <Grid item lg={12}>
-            <TextField
-              id="Email"
-              name="Email"
+              id="email"
+              name="email"
               label="Email"
               type="email"
-              value={formik.values.Email}
+              value={formik.values.email}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.Email && Boolean(formik.errors.Email)}
-              helperText={formik.touched.Email && formik.errors.Email}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
               variant="outlined"
               sx={{ width: 440 }}
               InputProps={{
@@ -118,15 +87,15 @@ const SignUp = () => {
           </Grid>
           <Grid item lg={12}>
             <TextField
-              id="Password"
-              name="Password"
+              id="password"
+              name="password"
               label="Password"
               type="password"
-              value={formik.values.Password}
+              value={formik.values.password}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.Password && Boolean(formik.errors.Password)}
-              helperText={formik.touched.Password && formik.errors.Password}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
               variant="outlined"
               sx={{ width: 440 }}
               InputProps={{
@@ -140,9 +109,9 @@ const SignUp = () => {
           </Grid>
           <Grid item lg={12}>
             <Typography variant="body1" component="span">
-              Already have an account?{" "}
-              <Link to="/" style={{ textDecoration: "none" }}>
-                <span style={{ color: "#000000" }}>Login</span>
+              Don't have an account?{" "}
+              <Link to="/signup" style={{ textDecoration: "none" }}>
+                <span style={{ color: "#000000" }}>Signup</span>
               </Link>
             </Typography>
           </Grid>
@@ -152,7 +121,7 @@ const SignUp = () => {
               sx={{ width: 200, height: 50 }}
               type="submit"
             >
-              <Typography variant="h6">Sign up</Typography>
+              <Typography variant="h6">Login</Typography>
             </Button>
           </Grid>
         </Grid>
@@ -161,4 +130,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Login;
