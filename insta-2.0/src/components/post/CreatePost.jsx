@@ -8,7 +8,12 @@ import {
   Grid,
   Stack,
   CardHeader,
+  IconButton,
+  InputAdornment,
 } from "@mui/material";
+
+import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import SendIcon from "@mui/icons-material/Send";
 
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
@@ -59,7 +64,7 @@ const CreatePost = () => {
       elevation={4}
       sx={{
         width: 840,
-        height: 250,
+        height: 90,
         borderRadius: 5,
         margin: "auto",
         mt: 2,
@@ -70,34 +75,49 @@ const CreatePost = () => {
 
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={2}>
-          <Grid item lg={12}>
-            <CardHeader
-              avatar={<Avatar aria-label="recipe" src={avatar} />}
-              title="Awais Shams"
-              subheader="September 14, 2016"
-            />
-          </Grid>
           <Grid item lg={12} sx={{ ml: 2, mr: 2 }}>
-            <TextField
-              id="caption"
-              name="caption"
-              label="Write something awesome..."
-              type="text"
-              value={formik.values.caption}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.caption && Boolean(formik.errors.caption)}
-              helperText={formik.touched.caption && formik.errors.caption}
-              variant="outlined"
-              fullWidth
-            />
-          </Grid>
-          <Grid item lg={12}>
-            <Stack direction="row" spacing={2} sx={{ ml: 2 }}>
-              <Button variant="contained">Add Photo</Button>
-              <Button variant="contained" type="submit">
-                Share
-              </Button>
+            <Stack direction="row" spacing={2} alignItems="center">
+              <Avatar alt="user" src={avatar} sx={{ width: 56, height: 56 }} />
+              <TextField
+                id="caption"
+                name="caption"
+                label="Start a post"
+                type="text"
+                onChange={formik.handleChange}
+                // onBlur={formik.handleBlur}
+                // error={formik.touched.caption && Boolean(formik.errors.caption)}
+                // helperText={formik.touched.caption && formik.errors.caption}
+                value={formik.values.caption}
+                variant="outlined"
+                fullWidth
+                sx={{
+                  ".MuiOutlinedInput-root": {
+                    borderRadius: 20,
+                  },
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        color="primary"
+                        aria-label="upload picture"
+                        component="label"
+                      >
+                        <input hidden accept="image/*" type="file" />
+                        <PhotoCamera />
+                      </IconButton>
+                      <IconButton
+                        color="primary"
+                        aria-label="upload picture"
+                        component="label"
+                      >
+                        <input hidden type="submit" />
+                        <SendIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
             </Stack>
           </Grid>
         </Grid>
