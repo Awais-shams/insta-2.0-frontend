@@ -20,6 +20,9 @@ import CreatePost from "../post/CreatePost";
 import Stories from "../stories/Stories";
 import PostCard from "../post/PostCard";
 
+import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -61,6 +64,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const NavBar = () => {
+  const navigate = useNavigate();
+  const [cookie, setCookie, removeCookie] = useCookies(['x-auth-token']);
+
+  // Remove cookie
+  removeCookie('valueName');
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -84,25 +93,34 @@ const NavBar = () => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const logout = () => {
+    // handleMenuClose();
+    removeCookie("x-auth-token", { path: "/" });
+    setTimeout(() => {
+      navigate("/");
+    }, 1000);
+  };
+
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
+        vertical: "bottom",
+        horizontal: "left",
       }}
       id={menuId}
       keepMounted
       transformOrigin={{
         vertical: "top",
-        horizontal: "right",
+        horizontal: "left",
       }}
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={logout}>Logout</MenuItem>
     </Menu>
   );
 

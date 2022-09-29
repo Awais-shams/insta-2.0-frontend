@@ -7,6 +7,7 @@ import {
   TextField,
   InputAdornment,
   Button,
+  Divider,
 } from "@mui/material";
 
 import EmailIcon from "@mui/icons-material/Email";
@@ -16,8 +17,11 @@ import logo from "../../assets/images/insta-logo.png";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useCookies } from "react-cookie";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const initialValues = {
   email: "",
@@ -29,11 +33,34 @@ const validationSchema = Yup.object({
   password: Yup.string().required(),
 });
 
-const onSubmit = (values) => {
-  console.log(values);
-};
-
 const Login = () => {
+  const navigate = useNavigate();
+
+  const [cookie, setCookie] = useCookies(["x-auth-token"]);
+
+  const onSubmit = (values) => {
+    console.log(values);
+    axios
+      .post("http://localhost:3000/auth/signin", {
+        email: values.email,
+        password: values.password,
+      })
+      .then((res) => {
+        console.log(res.data);
+        toast.success(res.data.message);
+        setCookie("x-auth-token", res.data.token, {
+          path: "/",
+        });
+        setTimeout(() => {
+          navigate("/postFeed");
+        }, 1000);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.response.data.message);
+      });
+  };
+
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -52,11 +79,12 @@ const Login = () => {
         boxShadow: 3,
       }}
     >
-      <Box sx={{ ml: 30 }}>
+      <Toaster />
+      <Box sx={{ ml: 35 }}>
         <img src={logo} alt="logo" style={{ width: 500, height: 200 }} />
       </Box>
       <form onSubmit={formik.handleSubmit}>
-        <Grid container spacing={2} sx={{ ml: 30 }}>
+        <Grid container spacing={2} sx={{ ml: 38 }}>
           <Grid item lg={12}>
             <Typography variant="h3" sx={{ color: "primary.main" }}>
               Login
@@ -107,22 +135,36 @@ const Login = () => {
               }}
             />
           </Grid>
-          <Grid item lg={12}>
-            <Typography variant="body1" component="span">
-              Don't have an account?{" "}
-              <Link to="/signup" style={{ textDecoration: "none" }}>
-                <span style={{ color: "#000000" }}>Signup</span>
-              </Link>
-            </Typography>
-          </Grid>
           <Grid item lg={12} sx={{ ml: 15 }}>
             <Button
               variant="contained"
-              sx={{ width: 200, height: 50 }}
+              sx={{ width: 200, height: 50, borderRadius: 16 }}
               type="submit"
             >
               <Typography variant="h6">Login</Typography>
             </Button>
+          </Grid>
+          <Grid item lg={12}>
+            <Divider
+              sx={{
+                "&::before": { borderTop: 1, borderColor: "#00000" },
+                width: 300,
+                ml: 8,
+                "&::after": { borderTop: 1, borderColor: "#00000" },
+              }}
+            >
+              or
+            </Divider>
+          </Grid>
+          <Grid item lg={12} sx={{ ml: 15 }}>
+            <Typography variant="body1" component="span">
+              Don't have an account?{" "}
+              <Link to="/signup" style={{ textDecoration: "none" }}>
+                <span style={{ color: "#000000", fontWeight: "bold" }}>
+                  Signup
+                </span>
+              </Link>
+            </Typography>
           </Grid>
         </Grid>
       </form>

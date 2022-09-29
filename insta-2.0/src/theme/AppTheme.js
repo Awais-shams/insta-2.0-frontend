@@ -17,6 +17,9 @@ const theme = createTheme({
       default: "#e1e1e1",
     },
   },
+  divider: {
+    background: "#00000",
+  },
   typography: {
     fontFamily: "Rubik",
     h1: {
