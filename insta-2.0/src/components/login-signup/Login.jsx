@@ -48,9 +48,7 @@ const Login = () => {
       .then((res) => {
         console.log(res.data);
         toast.success(res.data.message);
-        setCookie("x-auth-token", res.data.token, {
-          path: "/",
-        });
+        setCookie("x-auth-token", res.data.token);
         setTimeout(() => {
           navigate("/postFeed");
         }, 1000);
