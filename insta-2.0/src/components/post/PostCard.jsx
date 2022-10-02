@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -32,7 +32,8 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-const PostCard = () => {
+const PostCard = (props) => {
+  console.log("props", props);
   const [expanded, setExpanded] = React.useState(false);
   const [cookie, setCookie] = useCookies(["x-auth-token"]);
 
@@ -40,25 +41,10 @@ const PostCard = () => {
     setExpanded(!expanded);
   };
 
-  const [post, setPost] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/posts/new", {
-        headers: { "x-auth-token": cookie["x-auth-token"] },
-      })
-      .then((res) => {
-        setPost(res.data.data);
-      })
-      .catch((err) => console.log(err));
-  }, [post]);
-
-  // console.log("awais", post.data);
-  return post.map((data) => {
-    // console.log(data.id);
+  return props.data.map((data) => {
     return (
       <Card
-        // id={data.id}
+        key={data._id}
         sx={{
           width: 840,
           height: 800,

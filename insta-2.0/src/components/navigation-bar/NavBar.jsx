@@ -65,10 +65,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const NavBar = () => {
   const navigate = useNavigate();
-  const [cookie, setCookie, removeCookie] = useCookies(['x-auth-token']);
+  const [cookie, setCookie, removeCookie] = useCookies(["x-auth-token"]);
 
   // Remove cookie
-  removeCookie('valueName');
+  removeCookie("valueName");
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -259,7 +259,7 @@ const NavBar = () => {
       <Box>
         <Stories />
         <CreatePost />
-        <PostCard />
+        {/* <PostCard /> */}
       </Box>
     </>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import {
   Paper,
@@ -8,6 +8,7 @@ import {
   Stack,
   IconButton,
   InputAdornment,
+  Box,
 } from "@mui/material";
 
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
@@ -19,6 +20,8 @@ import toast, { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useCookies } from "react-cookie";
+
+import PostCard from "./PostCard";
 
 import avatar from "../../assets/images/avatar.JPG";
 
@@ -32,17 +35,14 @@ const validationSchema = Yup.object({
 
 const CreatePost = () => {
   const [cookie, setCookie] = useCookies(["x-auth-token"]);
+
+  const [post, setPost] = useState([]);
+  const [check, setCheck] = useState(false);
+
   console.log(cookie["x-auth-token"]);
+
   const onSubmit = (values) => {
     console.log(values);
-
-    const options = {
-      headers: {
-        authorization: cookie["x-auth-token"],
-        "Content-Type": "application/json",
-        Accept: "application/json, text/plain, */*",
-      },
-    };
 
     axios
       .post(
@@ -56,6 +56,7 @@ const CreatePost = () => {
       )
       .then((res) => {
         console.log(res.data);
+        setCheck(!check);
         toast.success(res.data.message);
       })
       .catch((err) => {
@@ -70,10 +71,16 @@ const CreatePost = () => {
     onSubmit,
   });
 
-  // useEffect(()=>{
-  //   axios.get()
-  // })
-
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/api/posts/new", {
+        headers: { "x-auth-token": cookie["x-auth-token"] },
+      })
+      .then((res) => {
+        setPost(res.data.data);
+      })
+      .catch((err) => console.log(err));
+  }, [check]);
   return (
     <Paper
       elevation={4}
@@ -137,6 +144,7 @@ const CreatePost = () => {
           </Grid>
         </Grid>
       </form>
+      <PostCard data={post} />
     </Paper>
   );
 };
