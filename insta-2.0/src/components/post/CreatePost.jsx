@@ -27,6 +27,7 @@ import avatar from "../../assets/images/avatar.JPG";
 
 const initialValues = {
   caption: "",
+  photo: {},
 };
 
 const validationSchema = Yup.object({
@@ -48,10 +49,14 @@ const CreatePost = () => {
       .post(
         "http://localhost:3000/api/posts/new",
         {
-          text: values.caption,
+          caption: values.caption,
+          photo: values.photo,
         },
         {
-          headers: { "x-auth-token": cookie["x-auth-token"] },
+          headers: {
+            "x-auth-token": cookie["x-auth-token"],
+            "Content-Type": "multipart/form-data",
+          },
         }
       )
       .then((res) => {
@@ -89,62 +94,81 @@ const CreatePost = () => {
         height: 90,
         borderRadius: 5,
         margin: "auto",
-        mt: 2,
-        p: 2,
+        mt: 4,
+        // p: 2,
       }}
     >
       <Toaster />
-
-      <form onSubmit={formik.handleSubmit}>
-        <Grid container spacing={2}>
-          <Grid item lg={12} sx={{ ml: 2, mr: 2 }}>
-            <Stack direction="row" spacing={2} alignItems="center">
-              <Avatar alt="user" src={avatar} sx={{ width: 56, height: 56 }} />
-              <TextField
-                id="caption"
-                name="caption"
-                label="Start a post"
-                type="text"
-                onChange={formik.handleChange}
-                // onBlur={formik.handleBlur}
-                // error={formik.touched.caption && Boolean(formik.errors.caption)}
-                // helperText={formik.touched.caption && formik.errors.caption}
-                value={formik.values.caption}
-                variant="outlined"
-                fullWidth
-                sx={{
-                  ".MuiOutlinedInput-root": {
-                    borderRadius: 20,
-                  },
-                }}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        color="primary"
-                        aria-label="upload picture"
-                        component="label"
-                      >
-                        <input hidden accept="image/*" type="file" />
-                        <PhotoCamera />
-                      </IconButton>
-                      <IconButton
-                        color="primary"
-                        aria-label="upload picture"
-                        component="label"
-                      >
-                        <input hidden type="submit" />
-                        <SendIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Stack>
+      <Box>
+        <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
+          <Grid container spacing={2}>
+            <Grid item lg={12} sx={{ ml: 2, mr: 2 }}>
+              <Stack direction="row" spacing={2} alignItems="center">
+                <Avatar
+                  alt="user"
+                  src={avatar}
+                  sx={{ width: 56, height: 56 }}
+                />
+                <TextField
+                  id="caption"
+                  name="caption"
+                  label="Start a post"
+                  type="text"
+                  onChange={formik.handleChange}
+                  // onBlur={formik.handleBlur}
+                  // error={formik.touched.caption && Boolean(formik.errors.caption)}
+                  // helperText={formik.touched.caption && formik.errors.caption}
+                  value={formik.values.caption}
+                  variant="outlined"
+                  fullWidth
+                  sx={{
+                    ".MuiOutlinedInput-root": {
+                      borderRadius: 20,
+                    },
+                  }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          color="primary"
+                          aria-label="upload picture"
+                          component="label"
+                        >
+                          <input
+                            id="photo"
+                            name="photo"
+                            hidden
+                            accept="image/*"
+                            type="file"
+                            onChange={(event) => {
+                              formik.setFieldValue(
+                                "photo",
+                                event.currentTarget.files[0]
+                              );
+                            }}
+                          />
+                          <PhotoCamera />
+                        </IconButton>
+                        <IconButton
+                          color="primary"
+                          aria-label="upload picture"
+                          component="label"
+                        >
+                          <input hidden type="submit" />
+                          <SendIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Stack>
+            </Grid>
           </Grid>
-        </Grid>
-      </form>
-      <PostCard data={post} />
+        </form>
+      </Box>
+      <Box sx={{ mt: 5 }}>
+        <PostCard data={post} />
+      </Box>
     </Paper>
   );
 };

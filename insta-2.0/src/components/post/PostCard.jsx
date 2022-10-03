@@ -14,12 +14,17 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Paper } from "@mui/material";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Box from "@mui/material/Box";
 
 import Post from "../../assets/images/post.jpg";
 import avatar from "../../assets/images/avatar.JPG";
-import axios from "axios";
-import { useCookies } from "react-cookie";
+import moment from "moment";
+
+const options = ["Edit", "Delete"];
+
+const ITEM_HEIGHT = 48;
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -33,9 +38,18 @@ const ExpandMore = styled((props) => {
 }));
 
 const PostCard = (props) => {
-  console.log("props", props);
+  console.log(props);
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const [expanded, setExpanded] = React.useState(false);
-  const [cookie, setCookie] = useCookies(["x-auth-token"]);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -63,21 +77,56 @@ const PostCard = (props) => {
             />
           }
           action={
-            <IconButton aria-label="settings">
-              <MoreVertIcon />
-            </IconButton>
+            <Box>
+              <IconButton
+                aria-label="more"
+                id="long-button"
+                aria-controls={open ? "long-menu" : undefined}
+                aria-expanded={open ? "true" : undefined}
+                aria-haspopup="true"
+                onClick={handleClick}
+              >
+                <MoreVertIcon />
+              </IconButton>
+              <Menu
+                id="long-menu"
+                MenuListProps={{
+                  "aria-labelledby": "long-button",
+                }}
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+              >
+                {options.map((option) => (
+                  <MenuItem key={option} onClick={handleClose}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
           }
           title={data.postedBy.name}
-          subheader="September 14, 2016"
+          subheader={moment(data.createdAt).format("ddd, hA")}
         />
         <CardMedia
           component="img"
-          height="194"
-          image={Post}
+          height="500"
+          image={data.photo}
           alt="Paella dish"
         />
         <CardContent>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body1" color="text.secondary">
+            <span style={{ color: "#000000", fontWeight: "bold" }}>
+              Caption:{" "}
+            </span>
             {data.text}
           </Typography>
         </CardContent>
