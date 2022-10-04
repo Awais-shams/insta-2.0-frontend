@@ -196,7 +196,7 @@ const NavBar = () => {
               component="div"
               sx={{ display: { xs: "none", sm: "block" } }}
             >
-              INSTA-2.0
+              Insta-2.0
             </Typography>
             <Search>
               <SearchIconWrapper>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -17,14 +17,29 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
 
 import Post from "../../assets/images/post.jpg";
 import avatar from "../../assets/images/avatar.JPG";
 import moment from "moment";
+import axios from "axios";
+import { useCookies } from "react-cookie";
 
-const options = ["Edit", "Delete"];
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
-const ITEM_HEIGHT = 48;
+const initialValues = {
+  caption: "",
+};
+
+const validationSchema = Yup.object({
+  caption: Yup.string().required().max(255),
+});
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -38,27 +53,113 @@ const ExpandMore = styled((props) => {
 }));
 
 const PostCard = (props) => {
-  console.log(props);
+  console.log("awais", props.data);
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [cookie, setCookie] = useCookies(["x-auth-token"]);
+
+  const [openDialog, setOpenDialog] = useState(false);
+  const [getPostId, setPostId] = useState(null);
+
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+
+  const [expanded, setExpanded] = useState(false);
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setPostId(null);
+  };
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  const [expanded, setExpanded] = React.useState(false);
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
+  const handleClickOpenDialog = (id) => {
+    console.log(id);
+    setPostId(id);
+    setOpenDialog(true);
   };
 
-  return props.data.map((data) => {
+  console.log(getPostId);
+
+  const onSubmit = (values) => {
+    console.log(values);
+    axios
+      .put(
+        `http://localhost:3000/api/posts/new/${getPostId}`,
+        {
+          caption: values.caption,
+        },
+        {
+          headers: {
+            "x-auth-token": cookie["x-auth-token"],
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+    handleCloseDialog();
+  };
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit,
+  });
+
+  const DialogBox = (
+    <Dialog open={openDialog} onClose={handleCloseDialog}>
+      <DialogTitle>Edit Caption</DialogTitle>
+      <form onSubmit={formik.handleSubmit}>
+        <DialogContent>
+          <TextField
+            id="caption"
+            name="caption"
+            label="Edit Caption"
+            type="text"
+            fullWidth
+            variant="standard"
+            onChange={formik.handleChange}
+            value={formik.values.caption}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button type="submit">Edit</Button>
+        </DialogActions>
+      </form>
+    </Dialog>
+  );
+
+  const deletePost = (id) => {
+    console.log(id);
+
+    axios
+      .delete(`http://localhost:3000/api/posts/new/${id}`, {
+        headers: {
+          "x-auth-token": cookie["x-auth-token"],
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const likePost = (id) => {
+    console.log(id);
+  };
+
+  return props.data.map((post) => {
+    const id = post._id;
+
     return (
       <Card
-        key={data._id}
         sx={{
           width: 840,
           height: 800,
@@ -105,21 +206,26 @@ const PostCard = (props) => {
                   horizontal: "left",
                 }}
               >
-                {options.map((option) => (
-                  <MenuItem key={option} onClick={handleClose}>
-                    {option}
-                  </MenuItem>
-                ))}
+                <MenuItem>{id}</MenuItem>
+
+                <MenuItem onClick={() => handleClickOpenDialog(id)}>
+                  Edit
+                </MenuItem>
+                <MenuItem onClick={() => deletePost(id)}>Delete</MenuItem>
               </Menu>
+              {openDialog ? DialogBox : null}
             </Box>
           }
-          title={data.postedBy.name}
-          subheader={moment(data.createdAt).format("ddd, hA")}
+          title={
+            post.postedBy.name.charAt(0).toUpperCase() +
+            post.postedBy.name.slice(1)
+          }
+          subheader={moment(post.createdAt).format("ddd, hA")}
         />
         <CardMedia
           component="img"
           height="500"
-          image={data.photo}
+          image={post.photo}
           alt="Paella dish"
         />
         <CardContent>
@@ -127,11 +233,14 @@ const PostCard = (props) => {
             <span style={{ color: "#000000", fontWeight: "bold" }}>
               Caption:{" "}
             </span>
-            {data.text}
+            {post.text}
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites">
+          <IconButton
+            aria-label="add to favorites"
+            onClick={() => likePost(post._id)}
+          >
             <FavoriteIcon />
           </IconButton>
           <IconButton aria-label="share">

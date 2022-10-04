@@ -21,13 +21,14 @@ const theme = createTheme({
     background: "#00000",
   },
   typography: {
-    fontFamily: "Rubik",
+    fontFamily: "Poppins",
     h1: {
       fontWeight: 500,
     },
     h2: {
       fontWeight: 400,
     },
+    
     button: {
       fontWeight: 400,
     },

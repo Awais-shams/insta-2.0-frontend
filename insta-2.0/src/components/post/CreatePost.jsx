@@ -9,6 +9,8 @@ import {
   IconButton,
   InputAdornment,
   Box,
+  Typography,
+  Chip,
 } from "@mui/material";
 
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
@@ -76,6 +78,7 @@ const CreatePost = () => {
     onSubmit,
   });
 
+  console.log(post.length);
   useEffect(() => {
     axios
       .get("http://localhost:3000/api/posts/new", {
@@ -118,12 +121,18 @@ const CreatePost = () => {
                   // onBlur={formik.handleBlur}
                   // error={formik.touched.caption && Boolean(formik.errors.caption)}
                   // helperText={formik.touched.caption && formik.errors.caption}
-                  value={formik.values.caption}
                   variant="outlined"
                   fullWidth
                   sx={{
                     ".MuiOutlinedInput-root": {
-                      borderRadius: 20,
+                      borderRadius: 10,
+                    },
+                    ".MuiInputBase-input": {
+                      ml: 0.8,
+                    },
+                    ".MuiInputLabel-root": {
+                      ml: 0.8,
+                      fontWeight: 500,
                     },
                   }}
                   InputProps={{
@@ -167,7 +176,16 @@ const CreatePost = () => {
         </form>
       </Box>
       <Box sx={{ mt: 5 }}>
-        <PostCard data={post} />
+        {post.length === 0 ? (
+          <Box sx={{ ml: 45 }}>
+            <Typography variant="h4">
+              {" "}
+              <Chip label="No Posts" color="primary" />
+            </Typography>
+          </Box>
+        ) : (
+          <PostCard data={post} />
+        )}
       </Box>
     </Paper>
   );
