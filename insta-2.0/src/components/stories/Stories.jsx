@@ -1,7 +1,8 @@
 import React from "react";
 
 import { Paper, Avatar, Stack } from "@mui/material";
-import avatar from "../../assets/images/avatar.JPG";
+
+import avatars from "./Avatars.js";
 
 const Stories = () => {
   return (
@@ -18,18 +19,9 @@ const Stories = () => {
     >
       <Stack direction="row" spacing={3}>
         <Avatar aria-label="recipe">+</Avatar>
-        <Avatar aria-label="recipe" src={avatar} />
-        <Avatar aria-label="recipe" src={avatar} />
-        <Avatar aria-label="recipe" src={avatar} />
-        <Avatar aria-label="recipe" src={avatar} />
-        <Avatar aria-label="recipe" src={avatar} />
-        <Avatar aria-label="recipe" src={avatar} />
-        <Avatar aria-label="recipe" src={avatar} />
-        <Avatar aria-label="recipe" src={avatar} />
-        <Avatar aria-label="recipe" src={avatar} />
-        <Avatar aria-label="recipe" src={avatar} />
-        <Avatar aria-label="recipe" src={avatar} />
-        <Avatar aria-label="recipe" src={avatar} />
+        {avatars.map((avatar, idx) => {
+          return <Avatar aria-label="recipe" src={avatar} key={idx} />;
+        })}
       </Stack>
     </Paper>
   );

@@ -25,7 +25,12 @@ import { useCookies } from "react-cookie";
 
 import PostCard from "./PostCard";
 
-import avatar from "../../assets/images/avatar.JPG";
+// import avatar from "../../assets/images/avatar.JPG";
+// import { BounceLoader } from "react-spinners";
+import avatars from "../stories/Avatars.js";
+
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const initialValues = {
   caption: "",
@@ -41,12 +46,13 @@ const CreatePost = () => {
 
   const [post, setPost] = useState([]);
   const [check, setCheck] = useState(false);
+  const [Loading, setLoading] = useState(false);
 
   console.log(cookie["x-auth-token"]);
 
   const onSubmit = (values) => {
     console.log(values);
-
+    setLoading(true);
     axios
       .post(
         "http://localhost:3000/api/posts/new",
@@ -64,6 +70,7 @@ const CreatePost = () => {
       .then((res) => {
         console.log(res.data);
         setCheck(!check);
+        setLoading(false);
         toast.success(res.data.message);
       })
       .catch((err) => {
@@ -101,6 +108,13 @@ const CreatePost = () => {
         // p: 2,
       }}
     >
+      {/* <BounceLoader loading={Loading} /> */}
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={Loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Toaster />
       <Box>
         <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
@@ -109,7 +123,7 @@ const CreatePost = () => {
               <Stack direction="row" spacing={2} alignItems="center">
                 <Avatar
                   alt="user"
-                  src={avatar}
+                  src={avatars[1]}
                   sx={{ width: 56, height: 56 }}
                 />
                 <TextField
@@ -121,6 +135,7 @@ const CreatePost = () => {
                   // onBlur={formik.handleBlur}
                   // error={formik.touched.caption && Boolean(formik.errors.caption)}
                   // helperText={formik.touched.caption && formik.errors.caption}
+                  value={formik.values.caption}
                   variant="outlined"
                   fullWidth
                   sx={{
@@ -184,7 +199,7 @@ const CreatePost = () => {
             </Typography>
           </Box>
         ) : (
-          <PostCard data={post} />
+          <PostCard data={post} avatar={avatars[1]} />
         )}
       </Box>
     </Paper>

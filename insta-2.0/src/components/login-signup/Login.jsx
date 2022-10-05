@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Typography,
   Box,
@@ -22,6 +22,7 @@ import { useCookies } from "react-cookie";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import avatars from "../stories/Avatars.js";
 
 const initialValues = {
   email: "",
@@ -37,6 +38,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [cookie, setCookie] = useCookies(["x-auth-token"]);
+
 
   const onSubmit = (values) => {
     console.log(values);

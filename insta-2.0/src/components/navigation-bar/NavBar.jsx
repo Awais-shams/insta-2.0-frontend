@@ -18,7 +18,6 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 
 import CreatePost from "../post/CreatePost";
 import Stories from "../stories/Stories";
-import PostCard from "../post/PostCard";
 
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
@@ -255,11 +254,6 @@ const NavBar = () => {
         </AppBar>
         {renderMobileMenu}
         {renderMenu}
-      </Box>
-      <Box>
-        <Stories />
-        <CreatePost />
-        {/* <PostCard /> */}
       </Box>
     </>
   );

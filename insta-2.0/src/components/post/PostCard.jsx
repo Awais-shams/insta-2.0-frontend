@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useRef } from "react";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -11,7 +11,6 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Menu from "@mui/material/Menu";
@@ -23,15 +22,15 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import CommentIcon from "@mui/icons-material/Comment";
 
-import Post from "../../assets/images/post.jpg";
-import avatar from "../../assets/images/avatar.JPG";
 import moment from "moment";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { color } from "@mui/system";
 
 const initialValues = {
   caption: "",
@@ -59,6 +58,8 @@ const PostCard = (props) => {
 
   const [openDialog, setOpenDialog] = useState(false);
   const [getPostId, setPostId] = useState(null);
+  const divRef = useRef();
+  const [like, setLike] = useState(false);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -72,15 +73,15 @@ const PostCard = (props) => {
     setOpenDialog(false);
     setPostId(null);
   };
-  const handleClick = (event) => {
+  const handleClick = (event, id) => {
+    console.log(id);
+    setPostId(id);
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const handleClickOpenDialog = (id) => {
-    console.log(id);
-    setPostId(id);
+  const handleClickOpenDialog = () => {
     setOpenDialog(true);
   };
 
@@ -136,6 +137,29 @@ const PostCard = (props) => {
     </Dialog>
   );
 
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        vertical: "bottom",
+        horizontal: "left",
+      }}
+      id={getPostId}
+      keepMounted
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "left",
+      }}
+      open={open}
+      onClose={handleClose}
+    >
+      <MenuItem>{}</MenuItem>
+
+      <MenuItem onClick={handleClickOpenDialog}>Edit</MenuItem>
+      <MenuItem onClick={() => deletePost(getPostId)}>Delete</MenuItem>
+    </Menu>
+  );
+
   const deletePost = (id) => {
     console.log(id);
 
@@ -152,14 +176,14 @@ const PostCard = (props) => {
   };
 
   const likePost = (id) => {
+    setLike(!like);
     console.log(id);
   };
 
   return props.data.map((post) => {
-    const id = post._id;
-
     return (
       <Card
+        key={post._id}
         sx={{
           width: 840,
           height: 800,
@@ -174,46 +198,24 @@ const PostCard = (props) => {
             <Avatar
               sx={{ bgcolor: red[500] }}
               aria-label="recipe"
-              src={avatar}
+              src={props.avatar}
             />
           }
           action={
             <Box>
               <IconButton
-                aria-label="more"
-                id="long-button"
-                aria-controls={open ? "long-menu" : undefined}
-                aria-expanded={open ? "true" : undefined}
+                ref={divRef}
+                aria-label="show more"
+                aria-controls={getPostId}
                 aria-haspopup="true"
-                onClick={handleClick}
+                onClick={(event) => handleClick(event, post._id)}
               >
                 <MoreVertIcon />
               </IconButton>
-              <Menu
-                id="long-menu"
-                MenuListProps={{
-                  "aria-labelledby": "long-button",
-                }}
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-              >
-                <MenuItem>{id}</MenuItem>
-
-                <MenuItem onClick={() => handleClickOpenDialog(id)}>
-                  Edit
-                </MenuItem>
-                <MenuItem onClick={() => deletePost(id)}>Delete</MenuItem>
-              </Menu>
-              {openDialog ? DialogBox : null}
+              <Box>
+                {renderMenu}
+                {openDialog ? DialogBox : null}
+              </Box>
             </Box>
           }
           title={
@@ -238,13 +240,14 @@ const PostCard = (props) => {
         </CardContent>
         <CardActions disableSpacing>
           <IconButton
+            // sx={{ like?color:"#D2001A":"#fffff" }}
             aria-label="add to favorites"
             onClick={() => likePost(post._id)}
           >
-            <FavoriteIcon />
+            <FavoriteIcon sx={{ color: like ? "#D2001A" : "#fffff" }} />
           </IconButton>
           <IconButton aria-label="share">
-            <ShareIcon />
+            <CommentIcon />
           </IconButton>
           <ExpandMore
             expand={expanded}
