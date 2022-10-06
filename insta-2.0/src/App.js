@@ -9,6 +9,7 @@ import Login from "./components/login-signup/Login";
 import NavBar from "./components/navigation-bar/NavBar";
 import PostFeed from "./pages/PostFeed";
 import Profile from "./components/user-profile/Profile";
+import Chat from "./components/chat/Chat";
 
 function App() {
   const location = useLocation();
@@ -24,6 +25,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/postFeed" element={<PostFeed />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/chat" element={<Chat />} />
       </Routes>
     </ThemeProvider>
   );

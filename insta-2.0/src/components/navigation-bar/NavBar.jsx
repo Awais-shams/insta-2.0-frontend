@@ -15,12 +15,12 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import InstagramIcon from "@mui/icons-material/Instagram";
-
-import CreatePost from "../post/CreatePost";
-import Stories from "../stories/Stories";
+import Avatar from "@mui/material/Avatar";
 
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+
+import avatars from "../stories/Avatars.js";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -235,7 +235,7 @@ const NavBar = () => {
                 onClick={handleProfileMenuOpen}
                 color="inherit"
               >
-                <AccountCircle />
+                <Avatar alt="user" src={avatars[1]} />
               </IconButton>
             </Box>
             <Box sx={{ display: { xs: "flex", md: "none" } }}>
