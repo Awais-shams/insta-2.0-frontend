@@ -75,122 +75,126 @@ const SignUp = () => {
         margin: "auto",
         width: "70vw",
         height: "90vh",
-        mt: 4,
+        mt: 5,
         borderRadius: 10,
         boxShadow: 3,
       }}
     >
       <Toaster />
-      <Box sx={{ ml: 35 }}>
-        <img src={logo} alt="logo" style={{ width: 500, height: 200 }} />
-      </Box>
-      <form onSubmit={formik.handleSubmit}>
-        <Grid container spacing={2} sx={{ ml: 38 }}>
-          <Grid item lg={12}>
-            <Typography variant="h3" sx={{ color: "primary.main" }}>
-              Signup
-            </Typography>
-          </Grid>
-          <Grid item lg={12}>
-            <TextField
-              id="name"
-              name="name"
-              label="Name"
-              type="text"
-              value={formik.values.name}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.name && Boolean(formik.errors.name)}
-              helperText={formik.touched.name && formik.errors.name}
-              variant="outlined"
-              sx={{ width: 440 }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <PersonIcon />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid>
-          <Grid item lg={12}>
-            <TextField
-              id="email"
-              name="email"
-              label="Email"
-              type="email"
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.email && Boolean(formik.errors.email)}
-              helperText={formik.touched.email && formik.errors.email}
-              variant="outlined"
-              sx={{ width: 440 }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <EmailIcon />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid>
-          <Grid item lg={12}>
-            <TextField
-              id="password"
-              name="password"
-              label="Password"
-              type="password"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.password && Boolean(formik.errors.password)}
-              helperText={formik.touched.password && formik.errors.password}
-              variant="outlined"
-              sx={{ width: 440 }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <PasswordIcon />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid>
+      <Box sx={{ mt: 4 }}>
+        <Box sx={{ ml: 43 }}>
+          <img src={logo} alt="logo" style={{ width: 500, height: 200 }} />
+        </Box>
+        <form onSubmit={formik.handleSubmit}>
+          <Grid container spacing={2} sx={{ ml: 45 }}>
+            <Grid item lg={12}>
+              <Typography variant="h3" sx={{ color: "primary.main" }}>
+                Signup
+              </Typography>
+            </Grid>
+            <Grid item lg={12}>
+              <TextField
+                id="name"
+                name="name"
+                label="Name"
+                type="text"
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.name && Boolean(formik.errors.name)}
+                helperText={formik.touched.name && formik.errors.name}
+                variant="outlined"
+                sx={{ width: 440 }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <PersonIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+            <Grid item lg={12}>
+              <TextField
+                id="email"
+                name="email"
+                label="Email"
+                type="email"
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                helperText={formik.touched.email && formik.errors.email}
+                variant="outlined"
+                sx={{ width: 440 }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <EmailIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+            <Grid item lg={12}>
+              <TextField
+                id="password"
+                name="password"
+                label="Password"
+                type="password"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.password && Boolean(formik.errors.password)
+                }
+                helperText={formik.touched.password && formik.errors.password}
+                variant="outlined"
+                sx={{ width: 440 }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <PasswordIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
 
-          <Grid item lg={12} sx={{ ml: 15 }}>
-            <Button
-              variant="contained"
-              sx={{ width: 200, height: 50, borderRadius: 16 }}
-              type="submit"
-            >
-              <Typography variant="h6">Sign up</Typography>
-            </Button>
+            <Grid item lg={12} sx={{ ml: 15 }}>
+              <Button
+                variant="contained"
+                sx={{ width: 200, height: 50, borderRadius: 16 }}
+                type="submit"
+              >
+                <Typography variant="h6">Sign up</Typography>
+              </Button>
+            </Grid>
+            <Grid item lg={12}>
+              <Divider
+                sx={{
+                  "&::before": { borderTop: 1, borderColor: "#00000" },
+                  width: 300,
+                  ml: 8,
+                  "&::after": { borderTop: 1, borderColor: "#00000" },
+                }}
+              >
+                or
+              </Divider>
+            </Grid>
+            <Grid item lg={12} sx={{ ml: 11 }}>
+              <Typography variant="body1" component="span">
+                Already have an account?{" "}
+                <Link to="/" style={{ textDecoration: "none" }}>
+                  <span style={{ color: "#000000", fontWeight: "bold" }}>
+                    Login
+                  </span>
+                </Link>
+              </Typography>
+            </Grid>
           </Grid>
-          <Grid item lg={12}>
-            <Divider
-              sx={{
-                "&::before": { borderTop: 1, borderColor: "#00000" },
-                width: 300,
-                ml: 8,
-                "&::after": { borderTop: 1, borderColor: "#00000" },
-              }}
-            >
-              or
-            </Divider>
-          </Grid>
-          <Grid item lg={12} sx={{ ml: 14 }}>
-            <Typography variant="body1" component="span">
-              Already have an account?{" "}
-              <Link to="/" style={{ textDecoration: "none" }}>
-                <span style={{ color: "#000000", fontWeight: "bold" }}>
-                  Login
-                </span>
-              </Link>
-            </Typography>
-          </Grid>
-        </Grid>
-      </form>
+        </form>
+      </Box>
     </Paper>
   );
 };

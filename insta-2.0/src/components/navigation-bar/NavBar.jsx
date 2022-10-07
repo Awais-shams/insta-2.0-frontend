@@ -17,6 +17,8 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import Avatar from "@mui/material/Avatar";
 
+import ChatIcon from "@mui/icons-material/Chat";
+
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
@@ -117,7 +119,7 @@ const NavBar = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={() => navigate("/profile")}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
       <MenuItem onClick={logout}>Logout</MenuItem>
     </Menu>
@@ -186,6 +188,7 @@ const NavBar = () => {
               color="inherit"
               aria-label="open drawer"
               sx={{ mr: 2 }}
+              onClick={() => navigate("/postFeed")}
             >
               <InstagramIcon />
             </IconButton>
@@ -210,12 +213,10 @@ const NavBar = () => {
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
               <IconButton
                 size="large"
-                aria-label="show 4 new mails"
                 color="inherit"
+                onClick={() => navigate("/chat")}
               >
-                <Badge badgeContent={4} color="error">
-                  <MailIcon />
-                </Badge>
+                <ChatIcon />
               </IconButton>
               <IconButton
                 size="large"

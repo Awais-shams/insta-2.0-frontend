@@ -39,7 +39,6 @@ const Login = () => {
 
   const [cookie, setCookie] = useCookies(["x-auth-token"]);
 
-
   const onSubmit = (values) => {
     console.log(values);
     axios
@@ -80,11 +79,11 @@ const Login = () => {
       }}
     >
       <Toaster />
-      <Box sx={{ ml: 35 }}>
+      <Box sx={{ ml: 43 }}>
         <img src={logo} alt="logo" style={{ width: 500, height: 200 }} />
       </Box>
       <form onSubmit={formik.handleSubmit}>
-        <Grid container spacing={2} sx={{ ml: 38 }}>
+        <Grid container spacing={2} sx={{ ml: 46 }}>
           <Grid item lg={12}>
             <Typography variant="h3" sx={{ color: "primary.main" }}>
               Login
@@ -156,7 +155,7 @@ const Login = () => {
               or
             </Divider>
           </Grid>
-          <Grid item lg={12} sx={{ ml: 15 }}>
+          <Grid item lg={12} sx={{ ml: 11 }}>
             <Typography variant="body1" component="span">
               Don't have an account?{" "}
               <Link to="/signup" style={{ textDecoration: "none" }}>
