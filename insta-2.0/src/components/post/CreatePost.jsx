@@ -85,10 +85,9 @@ const CreatePost = () => {
     onSubmit,
   });
 
-  console.log(post.length);
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/posts/new", {
+      .get("http://localhost:3000/api/posts", {
         headers: { "x-auth-token": cookie["x-auth-token"] },
       })
       .then((res) => {
